@@ -47,7 +47,7 @@ target_include_directories(schemaregistry-test
 # Link libraries for the test executable (base dependencies)
 target_link_libraries(schemaregistry-test
     PRIVATE
-        GTest::gtest_main
+        googletest::gtest_main
         schemaregistry
 )
 
