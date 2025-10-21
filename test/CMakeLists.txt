@@ -11,6 +11,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 endif()
+find_package(GTest CONFIG REQUIRED)
 
 # Compile project protobuf files
 include(../cmake/CompileProtobuf.cmake)
@@ -47,7 +48,7 @@ target_include_directories(schemaregistry-test
 # Link libraries for the test executable (base dependencies)
 target_link_libraries(schemaregistry-test
     PRIVATE
-        googletest::gtest_main
+        GTest::gtest_main
         schemaregistry
 )
 
