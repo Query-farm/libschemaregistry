@@ -1,5 +1,7 @@
 include(FetchContent)
 
+find_package(googletest CONFIG QUIET)
+if(NOT googletest_FOUND)
 # Download GoogleTest if not already present
 # See https://google.github.io/googletest/quickstart-cmake.html
 FetchContent_Declare(
@@ -8,6 +10,7 @@ FetchContent_Declare(
     DOWNLOAD_EXTRACT_TIMESTAMP true
 )
 FetchContent_MakeAvailable(googletest)
+endif()
 
 # Compile project protobuf files
 include(../cmake/CompileProtobuf.cmake)
