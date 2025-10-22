@@ -1,19 +1,20 @@
 #include "schemaregistry/serdes/SerdeTypes.h"
 
-#include <google/protobuf/message.h>
-
-#include <avro/Compiler.hh>
-#include <avro/ValidSchema.hh>
 #include <sstream>
 
 #include "absl/strings/escaping.h"
 #include "schemaregistry/rest/model/RegisteredSchema.h"
 #include "schemaregistry/rest/model/Schema.h"
 #ifdef SCHEMAREGISTRY_USE_AVRO
+#include <avro/Compiler.hh>
+#include <avro/ValidSchema.hh>
+
 #include "schemaregistry/serdes/avro/AvroTypes.h"
 #endif
 #include "schemaregistry/serdes/json/JsonTypes.h"
 #ifdef SCHEMAREGISTRY_USE_PROTOBUF
+#include <google/protobuf/message.h>
+
 #include "schemaregistry/serdes/protobuf/ProtobufTypes.h"
 #endif
 
@@ -34,7 +35,7 @@ SchemaSelector SchemaSelector::useLatestVersion() {
 }
 
 SchemaSelector SchemaSelector::useLatestWithMetadata(
-    const std::unordered_map<std::string, std::string> &metadata) {
+    const std::unordered_map<std::string, std::string>& metadata) {
     SchemaSelector data;
     data.type = SchemaSelectorType::LatestWithMetadata;
     data.metadata = metadata;
@@ -84,14 +85,14 @@ std::string fieldTypeToString(FieldType type) {
 
 // ParsedSchemaCache template implementation
 template <typename T>
-void ParsedSchemaCache<T>::set(const Schema &schema, const T &parsed_schema) {
+void ParsedSchemaCache<T>::set(const Schema& schema, const T& parsed_schema) {
     std::lock_guard<std::mutex> lock(mutex_);
     std::string key = getSchemaKey(schema);
     cache_[key] = parsed_schema;
 }
 
 template <typename T>
-std::optional<T> ParsedSchemaCache<T>::get(const Schema &schema) const {
+std::optional<T> ParsedSchemaCache<T>::get(const Schema& schema) const {
     std::lock_guard<std::mutex> lock(mutex_);
     std::string key = getSchemaKey(schema);
     auto it = cache_.find(key);
@@ -108,7 +109,7 @@ void ParsedSchemaCache<T>::clear() {
 }
 
 template <typename T>
-std::string ParsedSchemaCache<T>::getSchemaKey(const Schema &schema) const {
+std::string ParsedSchemaCache<T>::getSchemaKey(const Schema& schema) const {
     // Us the JSON representation of the schema to create a hash
     nlohmann::json j;
     to_json(j, schema);
@@ -121,13 +122,13 @@ template class ParsedSchemaCache<int>;
 
 // Base64 encoding/decoding utilities
 namespace {
-std::string base64_encode(const std::vector<uint8_t> &bytes) {
-    std::string input(reinterpret_cast<const char *>(bytes.data()),
+std::string base64_encode(const std::vector<uint8_t>& bytes) {
+    std::string input(reinterpret_cast<const char*>(bytes.data()),
                       bytes.size());
     return absl::Base64Escape(input);
 }
 
-std::vector<uint8_t> base64_decode(const std::string &encoded_string) {
+std::vector<uint8_t> base64_decode(const std::string& encoded_string) {
     std::string decoded;
     if (!absl::Base64Unescape(encoded_string, &decoded)) {
         // Return empty vector on decode failure
@@ -139,7 +140,7 @@ std::vector<uint8_t> base64_decode(const std::string &encoded_string) {
 
 // SerdeValue static factory method implementations
 std::unique_ptr<SerdeValue> SerdeValue::newString(SerdeFormat format,
-                                                  const std::string &value) {
+                                                  const std::string& value) {
     switch (format) {
 #ifdef SCHEMAREGISTRY_USE_AVRO
         case SerdeFormat::Avro: {
@@ -163,7 +164,7 @@ std::unique_ptr<SerdeValue> SerdeValue::newString(SerdeFormat format,
 }
 
 std::unique_ptr<SerdeValue> SerdeValue::newBytes(
-    SerdeFormat format, const std::vector<uint8_t> &value) {
+    SerdeFormat format, const std::vector<uint8_t>& value) {
     switch (format) {
 #ifdef SCHEMAREGISTRY_USE_AVRO
         case SerdeFormat::Avro: {
@@ -189,7 +190,7 @@ std::unique_ptr<SerdeValue> SerdeValue::newBytes(
 }
 
 std::unique_ptr<SerdeValue> SerdeValue::newJson(SerdeFormat format,
-                                                const nlohmann::json &value) {
+                                                const nlohmann::json& value) {
     switch (format) {
 #ifdef SCHEMAREGISTRY_USE_AVRO
         case SerdeFormat::Avro: {
@@ -226,7 +227,7 @@ std::string formatToString(SerdeFormat format) {
     }
 }
 
-SerdeFormat stringToFormat(const std::string &format) {
+SerdeFormat stringToFormat(const std::string& format) {
     if (format == "AVRO" || format == "avro") {
         return SerdeFormat::Avro;
     } else if (format == "JSON" || format == "json") {
