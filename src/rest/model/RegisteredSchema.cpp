@@ -21,11 +21,11 @@ RegisteredSchema::RegisteredSchema() {
     // Optional members are initialized to std::nullopt by default
 }
 
-RegisteredSchema::RegisteredSchema(const std::optional<int32_t> &id,
-                                   const std::optional<std::string> &guid,
-                                   const std::optional<std::string> &subject,
-                                   const std::optional<int32_t> &version,
-                                   const Schema &schema)
+RegisteredSchema::RegisteredSchema(const std::optional<int32_t>& id,
+                                   const std::optional<std::string>& guid,
+                                   const std::optional<std::string>& subject,
+                                   const std::optional<int32_t>& version,
+                                   const Schema& schema)
     : id_(id),
       guid_(guid),
       subject_(subject),
@@ -36,18 +36,18 @@ RegisteredSchema::RegisteredSchema(const std::optional<int32_t> &id,
       ruleSet_(schema.getRuleSet()),
       schema_(schema.getSchema()) {}
 
-bool RegisteredSchema::operator==(const RegisteredSchema &rhs) const {
+bool RegisteredSchema::operator==(const RegisteredSchema& rhs) const {
     return id_ == rhs.id_ && guid_ == rhs.guid_ && subject_ == rhs.subject_ &&
            version_ == rhs.version_ && schemaType_ == rhs.schemaType_ &&
            references_ == rhs.references_ && metadata_ == rhs.metadata_ &&
            ruleSet_ == rhs.ruleSet_ && schema_ == rhs.schema_;
 }
 
-bool RegisteredSchema::operator!=(const RegisteredSchema &rhs) const {
+bool RegisteredSchema::operator!=(const RegisteredSchema& rhs) const {
     return !(*this == rhs);
 }
 
-void to_json(nlohmann::json &j, const RegisteredSchema &o) {
+void to_json(nlohmann::json& j, const RegisteredSchema& o) {
     j = nlohmann::json::object();
     if (o.id_.has_value()) j["id"] = o.id_.value();
     if (o.guid_.has_value()) j["guid"] = o.guid_.value();
@@ -60,7 +60,7 @@ void to_json(nlohmann::json &j, const RegisteredSchema &o) {
     if (o.schema_.has_value()) j["schema"] = o.schema_.value();
 }
 
-void from_json(const nlohmann::json &j, RegisteredSchema &o) {
+void from_json(const nlohmann::json& j, RegisteredSchema& o) {
     if (j.find("id") != j.end()) {
         int32_t temp;
         j.at("id").get_to(temp);
@@ -85,7 +85,10 @@ void from_json(const nlohmann::json &j, RegisteredSchema &o) {
         std::string temp;
         j.at("schemaType").get_to(temp);
         o.schemaType_ = temp;
+    } else {
+        o.schemaType_ = "AVRO";
     }
+
     if (j.find("references") != j.end()) {
         std::vector<schemaregistry::rest::model::SchemaReference> temp;
         j.at("references").get_to(temp);
@@ -110,13 +113,13 @@ void from_json(const nlohmann::json &j, RegisteredSchema &o) {
 
 std::optional<int32_t> RegisteredSchema::getId() const { return id_; }
 
-void RegisteredSchema::setId(const std::optional<int32_t> &value) {
+void RegisteredSchema::setId(const std::optional<int32_t>& value) {
     id_ = value;
 }
 
 std::optional<std::string> RegisteredSchema::getGuid() const { return guid_; }
 
-void RegisteredSchema::setGuid(const std::optional<std::string> &value) {
+void RegisteredSchema::setGuid(const std::optional<std::string>& value) {
     guid_ = value;
 }
 
@@ -124,13 +127,13 @@ std::optional<std::string> RegisteredSchema::getSubject() const {
     return subject_;
 }
 
-void RegisteredSchema::setSubject(const std::optional<std::string> &value) {
+void RegisteredSchema::setSubject(const std::optional<std::string>& value) {
     subject_ = value;
 }
 
 std::optional<int32_t> RegisteredSchema::getVersion() const { return version_; }
 
-void RegisteredSchema::setVersion(const std::optional<int32_t> &value) {
+void RegisteredSchema::setVersion(const std::optional<int32_t>& value) {
     version_ = value;
 }
 
@@ -138,7 +141,7 @@ std::optional<std::string> RegisteredSchema::getSchemaType() const {
     return schemaType_;
 }
 
-void RegisteredSchema::setSchemaType(const std::optional<std::string> &value) {
+void RegisteredSchema::setSchemaType(const std::optional<std::string>& value) {
     schemaType_ = value;
 }
 
@@ -149,7 +152,7 @@ RegisteredSchema::getReferences() const {
 
 void RegisteredSchema::setReferences(
     const std::optional<
-        std::vector<schemaregistry::rest::model::SchemaReference>> &value) {
+        std::vector<schemaregistry::rest::model::SchemaReference>>& value) {
     references_ = value;
 }
 
@@ -159,7 +162,7 @@ RegisteredSchema::getMetadata() const {
 }
 
 void RegisteredSchema::setMetadata(
-    const std::optional<schemaregistry::rest::model::Metadata> &value) {
+    const std::optional<schemaregistry::rest::model::Metadata>& value) {
     metadata_ = value;
 }
 
@@ -169,7 +172,7 @@ RegisteredSchema::getRuleSet() const {
 }
 
 void RegisteredSchema::setRuleSet(
-    const std::optional<schemaregistry::rest::model::RuleSet> &value) {
+    const std::optional<schemaregistry::rest::model::RuleSet>& value) {
     ruleSet_ = value;
 }
 
@@ -177,7 +180,7 @@ std::optional<std::string> RegisteredSchema::getSchema() const {
     return schema_;
 }
 
-void RegisteredSchema::setSchema(const std::optional<std::string> &value) {
+void RegisteredSchema::setSchema(const std::optional<std::string>& value) {
     schema_ = value;
 }
 
