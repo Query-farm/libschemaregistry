@@ -187,6 +187,11 @@ struct SchemaSelector {
     static SchemaSelector useLatestVersion();
     static SchemaSelector useLatestWithMetadata(
         const std::unordered_map<std::string, std::string> &metadata);
+
+    bool operator==(const SchemaSelector &rhs) const {
+        return type == rhs.type && schema_id == rhs.schema_id &&
+               metadata == rhs.metadata;
+    }
 };
 
 /**
