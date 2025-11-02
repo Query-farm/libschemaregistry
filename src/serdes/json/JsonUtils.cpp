@@ -96,7 +96,7 @@ nlohmann::json transformFields(
                         instance_location.to_string();
 
                     if ((schema_navigation::isObjectSchema(schema_node) ||
-                        schema_node.contains("properties")) &&
+                         schema_node.contains("properties")) &&
                         instance_node.is_object()) {
                         auto properties =
                             schema_navigation::getSchemaProperties(schema_node);
@@ -356,19 +356,12 @@ std::unordered_set<std::string> getConfluentTags(
 // Validation utilities implementations
 namespace validation_utils {
 
-bool validateJson(
+void validateJson(
     std::shared_ptr<jsoncons::jsonschema::json_schema<jsoncons::ojson>> schema,
     const nlohmann::json &value) {
-    try {
-        auto jsoncons_value = jsonToOJson(value);
-        schema->validate(jsoncons_value);
-
-        return true;
-    } catch (const std::exception &e) {
-        return false;
-    }
+    auto jsoncons_value = jsonToOJson(value);
+    schema->validate(jsoncons_value);
 }
-
 }  // namespace validation_utils
 
 // Path utilities implementations

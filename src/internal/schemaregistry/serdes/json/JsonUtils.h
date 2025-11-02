@@ -138,9 +138,8 @@ namespace validation_utils {
  * Validate JSON value against schema
  * @param schema JSON schema for validation
  * @param value JSON value to validate
- * @return True if validation passes, false otherwise
  */
-bool validateJson(
+void validateJson(
     std::shared_ptr<jsoncons::jsonschema::json_schema<jsoncons::ojson>> schema,
     const nlohmann::json &value);
 
